@@ -5,10 +5,13 @@
 - hosts: packet
   any_errors_fatal: true
   roles:
-    - {role: ax25, tags: [packet], become: True}
-    - {role: devoinc.systemd_service, tags: [systemd], become: True}
+    - role: ax25
+      tags: [ax25]
+      become: True
 
     - role: devoinc.systemd_service
+      tags: [systemd]
+      become: True
       systemd_service:
         socat:
           enabled: Yes
@@ -43,7 +46,7 @@
           type: oneshot
           remain_after_exit: yes
           restart: "on-failure"
-          requires: "kissattach.service"
+          requires: "nrattach.service"
           wanted_by: "multi-user.target"
         ax25d:
           enabled: Yes
@@ -51,5 +54,3 @@
           restart: "on-failure"
           requires: "kissattach.service"
           wanted_by: "multi-user.target"
-      tags: [systemd]
-      become: True

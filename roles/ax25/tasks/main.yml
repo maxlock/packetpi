@@ -36,12 +36,12 @@
     mode: '0644'
 
 - name: install ax25 packages
-  action: >
-    {{ ansible_pkg_mgr }} name={{ item }} state=present update_cache=yes
-  with_items:
-    - ax25-apps
-    - ax25-node
-    - ax25-tools
+  ansible.builtin.package:
+    name:
+      - ax25-apps
+      - ax25-node
+      - ax25-tools
+    state: present
 
 - name: configure services
   lineinfile:

@@ -1,12 +1,8 @@
-Role Name
+AX25
 =========
 
-A brief description of the role goes here.
+This role configures the linux kernel ax25 applications.
 
-Requirements
-------------
-
-Any pre-requisites that may not be covered by Ansible itself or the role should be mentioned here. For instance, if the role uses the EC2 module, it may be a good idea to mention in this section that the boto package is required.
 
 Role Variables
 --------------
@@ -16,7 +12,53 @@ A description of the settable variables for this role should go here, including 
 Dependencies
 ------------
 
-A list of other roles hosted on Galaxy should go here, plus any details in regards to parameters that may need to be set for other roles, or variables that are used from other roles.
+Whilst not dependant on any other roles, configuring systemd to start the provisioned daemons can be achieved by using the devoinc.systemd_service role as follows
+
+`   - role: devoinc.systemd_service
+      become: True
+      systemd_service:
+
+        kissattach:
+          enabled: Yes
+          exec_start: "/usr/sbin/kissattach /dev/tnc ax0"
+          type: oneshot
+          remain_after_exit: yes
+          restart: "on-failure"
+          requires: "socat.service"
+          wanted_by: "multi-user.target"
+
+        nrattach:
+          enabled: Yes
+          exec_start: "/usr/sbin/nrattach netrom"
+          type: oneshot
+          remain_after_exit: yes
+          restart: "on-failure"
+          requires: "kissattach.service"
+          wanted_by: "multi-user.target"
+
+        mheard:
+          enabled: Yes
+          exec_start: "/usr/sbin/mheardd"
+          restart: "on-failure"
+          requires: "kissattach.service"
+          wanted_by: "multi-user.target"
+
+        netrom:
+          enabled: Yes
+          exec_start: "/usr/sbin/netromd -i"
+          type: oneshot
+          remain_after_exit: yes
+          restart: "on-failure"
+          requires: "nrattach.service"
+          wanted_by: "multi-user.target"
+
+        ax25d:
+          enabled: Yes
+          exec_start: "/usr/sbin/ax25d -l"
+          restart: "on-failure"
+          requires: "kissattach.service"
+          wanted_by: "multi-user.target"
+`
 
 Example Playbook
 ----------------
@@ -25,14 +67,16 @@ Including an example of how to use your role (for instance, with variables passe
 
     - hosts: servers
       roles:
-         - { role: username.rolename, x: 42 }
+      - role: ax25
+        tags: [ax25]
+        become: True
 
 License
 -------
 
-BSD
+GPL3
 
 Author Information
 ------------------
 
-An optional section for the role authors to include contact information, or a website (HTML is not allowed).
+Contact the author via github https://github.com/maxlock/packetpi
