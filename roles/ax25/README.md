@@ -14,62 +14,65 @@ Dependencies
 
 Whilst not dependant on any other roles, configuring systemd to start the provisioned daemons can be achieved by using the devoinc.systemd_service role as follows
 
-`   - role: devoinc.systemd_service
-      become: True
-      systemd_service:
+```
+- role: devoinc.systemd_service
+  become: True
+  systemd_service:
 
-        kissattach:
-          enabled: Yes
-          exec_start: "/usr/sbin/kissattach /dev/tnc ax0"
-          type: oneshot
-          remain_after_exit: yes
-          restart: "on-failure"
-          requires: "socat.service"
-          wanted_by: "multi-user.target"
+    kissattach:
+      enabled: Yes
+      exec_start: "/usr/sbin/kissattach /dev/tnc ax0"
+      type: oneshot
+      remain_after_exit: yes
+      restart: "on-failure"
+      requires: "socat.service"
+      wanted_by: "multi-user.target"
 
-        nrattach:
-          enabled: Yes
-          exec_start: "/usr/sbin/nrattach netrom"
-          type: oneshot
-          remain_after_exit: yes
-          restart: "on-failure"
-          requires: "kissattach.service"
-          wanted_by: "multi-user.target"
+    nrattach:
+      enabled: Yes
+      exec_start: "/usr/sbin/nrattach netrom"
+      type: oneshot
+      remain_after_exit: yes
+      restart: "on-failure"
+      requires: "kissattach.service"
+      wanted_by: "multi-user.target"
 
-        mheard:
-          enabled: Yes
-          exec_start: "/usr/sbin/mheardd"
-          restart: "on-failure"
-          requires: "kissattach.service"
-          wanted_by: "multi-user.target"
+    mheard:
+      enabled: Yes
+      exec_start: "/usr/sbin/mheardd"
+      restart: "on-failure"
+      requires: "kissattach.service"
+      wanted_by: "multi-user.target"
 
-        netrom:
-          enabled: Yes
-          exec_start: "/usr/sbin/netromd -i"
-          type: oneshot
-          remain_after_exit: yes
-          restart: "on-failure"
-          requires: "nrattach.service"
-          wanted_by: "multi-user.target"
+    netrom:
+      enabled: Yes
+      exec_start: "/usr/sbin/netromd -i"
+      type: oneshot
+      remain_after_exit: yes
+      restart: "on-failure"
+      requires: "nrattach.service"
+      wanted_by: "multi-user.target"
 
-        ax25d:
-          enabled: Yes
-          exec_start: "/usr/sbin/ax25d -l"
-          restart: "on-failure"
-          requires: "kissattach.service"
-          wanted_by: "multi-user.target"
-`
+    ax25d:
+      enabled: Yes
+      exec_start: "/usr/sbin/ax25d -l"
+      restart: "on-failure"
+      requires: "kissattach.service"
+      wanted_by: "multi-user.target"
+```
 
 Example Playbook
 ----------------
 
 Including an example of how to use your role (for instance, with variables passed in as parameters) is always nice for users too:
 
-    - hosts: servers
-      roles:
-      - role: ax25
-        tags: [ax25]
-        become: True
+```
+- hosts: servers
+  roles:
+  - role: ax25
+    tags: [ax25]
+    become: True
+```
 
 License
 -------
