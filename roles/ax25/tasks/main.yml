@@ -1,0 +1,77 @@
+---
+# tasks file for ax25
+
+- name: set kiss module parameters
+  ansible.builtin.copy:
+    content: 'options mkiss crc_force=1' 
+    dest: /etc/modprobe.d/mkiss.conf
+    owner: root
+    group: root
+    mode: '0644'
+
+- name: load kiss module
+  modprobe:
+    name: mkiss
+    state: present
+
+- name: load netrom module
+  modprobe:
+    name: netrom
+    state: present
+      
+- name: load netrom module on boot
+  ansible.builtin.copy:
+    content: 'netrom'
+    dest: /etc/modules-load.d/netrom.conf
+    owner: root
+    group: root
+    mode: '0644'
+
+- name: load kiss module on boot
+  ansible.builtin.copy:
+    content: 'mkiss'
+    dest: /etc/modules-load.d/mkiss.conf
+    owner: root
+    group: root
+    mode: '0644'
+
+- name: install ax25 packages
+  action: >
+    {{ ansible_pkg_mgr }} name={{ item }} state=present update_cache=yes
+  with_items:
+    - ax25-apps
+    - ax25-node
+    - ax25-tools
+
+- name: configure services
+  lineinfile:
+    path: /etc/services
+    regexp: '^node.*software$'
+    insertafter: '^# Local services'
+    line: 'node            4444/tcp                        # OH2BNS node software'
+  notify:
+    - reload inetd
+
+- name: configure inetd
+  lineinfile:
+    path: /etc/inetd.conf
+    regexp: '^node.*node$'
+    insertafter: '^#:HAM-RADIO: amateur-radio services'
+    line: node stream tcp nowait root /usr/sbin/ax25-node ax25-node
+  notify:
+    - reload inetd
+
+- name: copy templates
+  ansible.builtin.template:
+    src: templates/{{ item }}.j2
+    dest: /etc/ax25/{{ item }}
+    owner: root
+    group: root
+    mode: 0644
+  loop:
+    - ax25d.conf
+    - axports
+    - node.conf
+    - node.perms
+    - nrbroadcast
+    - nrports

@@ -1,0 +1,17 @@
+# /etc/ax25/ax25d.conf
+#
+# ax25d Configuration File.
+#
+# AX.25 Ports begin with a '['.
+#
+# Please note that the programs node and finger are not part of ax25-tools.
+#
+[{{callsign|upper}}-{{nrport}} VIA ax0]
+NOCALL  * * * * * * L
+default * * * * * 0 - root /usr/sbin/ax25-node node
+#
+# NET/ROM ports begin with a '<'.
+#
+<netrom>
+NOCALL  * * * * * * L
+default * * * * * * - root /usr/sbin/ax25-node node

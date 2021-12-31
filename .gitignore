@@ -1,0 +1,19 @@
+# Vim swapfiles
+**/*.swp
+
+# Python
+#
+**/*pyc
+
+# Ansible temp files
+#
+.ansible
+
+# Ansible retries
+# 
+**/*.retry
+
+# Galaxy roles
+#
+roles/*
+!roles/ax25
