@@ -25,6 +25,7 @@
           remain_after_exit: yes
           restart: "on-failure"
           requires: "socat.service"
+          after: "socat.service"
           wanted_by: "multi-user.target"
         nrattach:
           enabled: Yes
@@ -33,12 +34,14 @@
           remain_after_exit: yes
           restart: "on-failure"
           requires: "kissattach.service"
+          after: "kissattach.service"
           wanted_by: "multi-user.target"
         mheard:
           enabled: Yes
           exec_start: "/usr/sbin/mheardd"
           restart: "on-failure"
           requires: "kissattach.service"
+          after: "kissattach.service"
           wanted_by: "multi-user.target"
         netrom:
           enabled: Yes
@@ -47,10 +50,12 @@
           remain_after_exit: yes
           restart: "on-failure"
           requires: "nrattach.service"
+          after: "nrattach.service"
           wanted_by: "multi-user.target"
         ax25d:
           enabled: Yes
           exec_start: "/usr/sbin/ax25d -l"
           restart: "on-failure"
           requires: "kissattach.service"
+          after: "kissattach.service"
           wanted_by: "multi-user.target"

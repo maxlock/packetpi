@@ -41,6 +41,8 @@
       - ax25-apps
       - ax25-node
       - ax25-tools
+      - socat
+      - telnet
     state: present
 
 - name: configure services

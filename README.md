@@ -1,16 +1,21 @@
 # PacketPi
 Is an ansible configuration that provisions linux AX25 tools on a Raspberry Pi.
 
-# Quick start 
-Edit the variables in inventory/hosts.yml, update your callsign and netrom alias
+# Instructions
+Boot the Raspberry Pi OS Lite image (may work on other Debian based OS) and install Ansible and Git.
+Clone this repo and edit the variables in inventory/hosts.yml, update your callsign and netrom alias
 Run the following commands on your Raspberry Pi.
 
 ```
-apt-get install ansible
+apt-get install ansible git
 git clone https://github.com/maxlock/packetpi
 cd packetpi
 ansible-galaxy install -r ./requirements.yml -p roles
-ansible-playbook -i ./inventory/ site.yml
+```
+At this point edit the file inventory/hosts.yml, update to your callsign and lastly run Ansible
+
+```
+sudo ansible-playbook -i ./inventory/ site.yml
 ``` 
 
 At this point you have a fully operational packet node. You can connect to the netrom node app by telnetting to port 4444
