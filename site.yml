@@ -21,41 +21,35 @@
         kissattach:
           enabled: Yes
           exec_start: "/usr/sbin/kissattach /dev/direwolf ax0"
-          type: oneshot
-          remain_after_exit: yes
           restart: "on-failure"
-          requires: "socat.service"
+          requisite: "socat.service"
           after: "socat.service"
           wanted_by: "multi-user.target"
         nrattach:
           enabled: Yes
           exec_start: "/usr/sbin/nrattach netrom"
-          type: oneshot
-          remain_after_exit: yes
           restart: "on-failure"
-          requires: "kissattach.service"
+          requisite: "kissattach.service"
           after: "kissattach.service"
           wanted_by: "multi-user.target"
         mheard:
           enabled: Yes
           exec_start: "/usr/sbin/mheardd"
           restart: "on-failure"
-          requires: "kissattach.service"
+          requisite: "kissattach.service"
           after: "kissattach.service"
           wanted_by: "multi-user.target"
         netrom:
           enabled: Yes
           exec_start: "/usr/sbin/netromd -i"
-          type: oneshot
-          remain_after_exit: yes
           restart: "on-failure"
-          requires: "nrattach.service"
+          requisite: "nrattach.service"
           after: "nrattach.service"
           wanted_by: "multi-user.target"
         ax25d:
           enabled: Yes
           exec_start: "/usr/sbin/ax25d -l"
           restart: "on-failure"
-          requires: "kissattach.service"
+          requisite: "kissattach.service"
           after: "kissattach.service"
           wanted_by: "multi-user.target"
