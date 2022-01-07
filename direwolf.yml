@@ -1,0 +1,9 @@
+---
+
+- hosts: localhost
+  connection: local
+  gather_facts: no
+  any_errors_fatal: true
+
+- name: include ax25 playboot
+  import_playbook: site.yml

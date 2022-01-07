@@ -1,0 +1,20 @@
+---
+
+- hosts: localhost
+  connection: local
+  gather_facts: no
+  any_errors_fatal: true
+  vars_prompt:
+    - name: serialPort
+      prompt: which serial port is your TNC connected to
+      default: "/dev/ttyUSB0"
+      private: no
+  pre_tasks:
+    - name: link tnc device
+      file:
+        src: "{{ serialPort }}"
+        dest: /dev/tnc
+        state: link
+
+- name: include ax25 playboot
+  import_playbook: site.yml

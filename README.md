@@ -12,13 +12,24 @@ git clone https://github.com/maxlock/packetpi
 cd packetpi
 ansible-galaxy install -r ./requirements.yml -p roles
 ```
-At this point edit the file inventory/hosts.yml, update to your callsign and lastly run Ansible
+Now you can run Ansible, it will prompt for settings such as callsign.
 
+To use a tnc connected to a serial port run
 ```
-sudo ansible-playbook -i ./inventory/ site.yml
+ansible-playbook local.yml
 ``` 
 
-At this point you have a fully operational packet node. You can connect to the netrom node app by telnetting to port 4444
+To use a remote kiss device over a network such as direwolf
+```
+ansible-playbook remote.yml
+``` 
+
+To use direwolf with a sound device (Yet to be implemented)
+```
+ansible-playbook direwolf.yml
+``` 
+
+You will now have a fully operational packet node. You can connect to the netrom node app by telnetting to port 4444
 
 ```
 pi@raspberrypi:~ $ telnet localhost 4444

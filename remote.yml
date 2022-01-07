@@ -1,0 +1,22 @@
+---
+
+- hosts: localhost
+  connection: local
+  gather_facts: no
+  any_errors_fatal: true
+  vars_prompt:
+    - name: kissHost 
+      prompt: what is your remote KISS devices hostname
+      private: no
+  roles:
+    - role: devoinc.systemd_service
+      become: True
+      systemd_service:
+        socat:
+          enabled: Yes
+          exec_start: "/usr/bin/socat PTY,link=/dev/tnc,raw,echo=0,wait-slave TCP4:{{ kissHost }}:8001"
+          restart: "always"
+          wanted_by: "multi-user.target"
+
+- name: include ax25 playboot
+  import_playbook: site.yml

@@ -1,26 +1,32 @@
 ---
-#- hosts: all
-#  gather_facts: yes
 
-- hosts: packet
+- hosts: localhost
+  connection: local
+  gather_facts: no
   any_errors_fatal: true
+  vars_prompt:
+    - name: callsign
+      prompt: what is your callsign
+      private: no
+    - name: nralias
+      prompt: what is your netrom alias
+      private: no
+    - name: nrport
+      prompt: what is your netrom port number
+      default: "1"
+    - name: nrpassword
+      prompt: what is your netrom node password 
+      private: yes
   roles:
     - role: ax25
-      tags: [ax25]
       become: True
 
     - role: devoinc.systemd_service
-      tags: [systemd]
       become: True
       systemd_service:
-        socat:
-          enabled: Yes
-          exec_start: "/usr/bin/socat PTY,link=/dev/direwolf,raw,echo=0,wait-slave TCP4:kvm:8001"
-          restart: "always"
-          wanted_by: "multi-user.target"
         kissattach:
           enabled: Yes
-          exec_start: "/usr/sbin/kissattach /dev/direwolf ax0"
+          exec_start: "/usr/sbin/kissattach /dev/tnc ax0"
           restart: "on-failure"
           requisite: "socat.service"
           after: "socat.service"
